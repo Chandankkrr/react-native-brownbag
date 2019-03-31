@@ -2,21 +2,65 @@ import React from 'react';
 import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
 import { createAppContainer, createDrawerNavigator } from 'react-navigation';
-import MapComponent from './MapComponent';
+import MapView, { Marker } from 'react-native-maps';
 
 export class App extends React.Component {
   constructor(props) {
     super(props);
 
     this.state = {
+      region: {
+        latitude: -37.8312404,
+        longitude: 144.988771,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      },
+      restaurants: [
+        {
+          id: '11',
+          latitude: -37.840000,
+          longitude: 144.988998,
+          title: 'Richmond',
+          description: 'Waffle place',
+          imageUrl: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0'
+        },
+        {
+          id: '12',
+          latitude: -37.794540,
+          longitude: 144.956696,
+          title: 'Parkville',
+          description: 'Cereal place',
+          imageUrl: 'https://images.unsplash.com/photo-1504712598893-24159a89200e'
+          
+        },
+        {
+          id: '13',
+          latitude: -37.803001,
+          longitude: 145.001999,
+          title: 'Abbotsford',
+          description: 'Donut place',
+          imageUrl: 'https://images.unsplash.com/photo-1495147466023-ac5c588e2e94'
+        },
+        {
+          id: '14',
+          latitude: -37.841110,
+          longitude: 144.954620,
+          title: 'Albert Park',
+          description: 'Icecream place',
+          imageUrl: 'https://images.unsplash.com/photo-1488900128323-21503983a07e'
+        },
+      ],
       selectedRestaurant: {
-        lat: -37.8312361,
-        lang: 144.988771,
-        title: 'Australia',
+        id: '11',
+        latitude: -37.8312404,
+        longitude: 144.988771,
+        title: 'Richmond',
+        description: 'Waffle place',
       }
     };
   }
-  onRestaurantSelection(selectedRestaurant) {
+
+  onRestaurantSelection = (selectedRestaurant) => {
     this.setState({ selectedRestaurant });
   }
 
@@ -29,30 +73,32 @@ export class App extends React.Component {
               horizontal={true}
               showsVerticalScrollIndicator={false}
               showsHorizontalScrollIndicator={false}>
-              <TouchableOpacity style={styles.div}>
-                <Image
-                  source={{ uri: 'https://images.unsplash.com/photo-1504754524776-8f4f37790ca0' }}
-                  style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.div}>
-                <Image
-                  source={{ uri: 'https://images.unsplash.com/photo-1504712598893-24159a89200e' }}
-                  style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.div}>
-                <Image
-                  source={{ uri: 'https://images.unsplash.com/photo-1495147466023-ac5c588e2e94' }}
-                  style={styles.image} />
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.div}>
-                <Image
-                  source={{ uri: 'https://images.unsplash.com/photo-1488900128323-21503983a07e' }}
-                  style={styles.image} />
-              </TouchableOpacity>
+              {
+                this.state.restaurants.map(restaurant => (
+                  <TouchableOpacity
+                    key={restaurant.title}
+                    onPress={() => this.onRestaurantSelection(restaurant)}
+                    style={styles.div}>
+                    <Image
+                      source={{ uri: restaurant.imageUrl }}
+                      style={styles.image} />
+                  </TouchableOpacity>
+                ))
+              }
             </ScrollView>
           </View>
           <View style={styles.section}>
-            <MapComponent/>
+            <MapView
+              style={{ flex: 1 }}
+              region={this.state.region}
+              showsUserLocation={true}>
+              <Marker
+                coordinate={this.state.selectedRestaurant}
+                title={this.state.selectedRestaurant.title}
+                description={this.state.selectedRestaurant.description}
+                key={this.state.selectedRestaurant.id}
+              />
+            </MapView> 
           </View>
         </ScrollView>
       </View>
@@ -60,13 +106,13 @@ export class App extends React.Component {
   }
 }
 
-export const MyDrawerNavigator = createDrawerNavigator({
+export const DrawerNavigator = createDrawerNavigator({
   Home: {
     screen: App,
   },
 });
 
-export default MyApp = createAppContainer(MyDrawerNavigator);
+export default Application = createAppContainer(DrawerNavigator);
 
 
 const styles = StyleSheet.create({
@@ -86,7 +132,6 @@ const styles = StyleSheet.create({
   section: {
     flex: 3,
     height: 600,
-    borderRadius: 10
   },
   div: {
     width: 200,
@@ -94,9 +139,9 @@ const styles = StyleSheet.create({
     margin: 15,
     borderRadius: 10
   },
-  image:{
-    height: 200, 
-    resizeMode: 'cover', 
+  image: {
+    height: 200,
+    resizeMode: 'cover',
     borderRadius: 15
   }
 });
