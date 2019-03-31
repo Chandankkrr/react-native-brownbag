@@ -35,8 +35,6 @@ class MapComponent extends React.Component {
 const styles = StyleSheet.create({
     container: {
         flex: 3,
-        height: 400,
-        //  backgroundColor: 'red',
         margin: 15,
         borderRadius: 10
     },

@@ -85,7 +85,7 @@ const styles = StyleSheet.create({
   },
   section: {
     flex: 3,
-    height: 400,
+    height: 600,
     borderRadius: 10
   },
   div: {
