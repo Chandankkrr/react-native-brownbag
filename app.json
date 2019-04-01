@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "javathehut",
+    "name": "Jabba the Hutt",
     "slug": "React-Native-Brownbag",
     "privacy": "public",
     "sdkVersion": "32.0.0",
@@ -24,6 +24,8 @@
     ],
     "ios": {
       "supportsTablet": true
-    }
+    },
+    "description": "Brownbag session on React Native",
+    "githubUrl": "https://github.com/Chandankkrr/react-native-brownbag"
   }
 }

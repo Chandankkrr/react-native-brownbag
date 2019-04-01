@@ -1,10 +1,34 @@
 import React from 'react';
-import { StyleSheet, View, Image, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Image, TouchableOpacity, StatusBar } from 'react-native';
 import { ScrollView } from 'react-native-gesture-handler';
-import { createAppContainer, createDrawerNavigator } from 'react-navigation';
+import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import MapView, { Marker } from 'react-native-maps';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 export class App extends React.Component {
+  static navigationOptions = ({ navigation }) => ({
+    title: 'Food trucks',
+    headerStyle: {
+      backgroundColor: '#f4511e',
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: 'bold',
+    },
+    headerLeft: <Icon
+      name="menu"
+      size={35}
+      color={'#fff'}
+      style={{ marginLeft: 5 }}
+      onPress={() => navigation.navigate('DrawerOpen')} />,
+    headerRight: <Icon
+      name="favorite-border"
+      size={35}
+      color={'#fff'}
+      style={{ marginRight: 5 }}
+      onPress={() => navigation.navigate('DrawerOpen')} />
+  });
+
   constructor(props) {
     super(props);
 
@@ -31,7 +55,6 @@ export class App extends React.Component {
           title: 'Parkville',
           description: 'Cereal place',
           imageUrl: 'https://images.unsplash.com/photo-1504712598893-24159a89200e'
-          
         },
         {
           id: '13',
@@ -67,6 +90,7 @@ export class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
+        <StatusBar barStyle="dark-content" />
         <ScrollView>
           <View style={styles.foodContainer}>
             <ScrollView
@@ -98,7 +122,7 @@ export class App extends React.Component {
                 description={this.state.selectedRestaurant.description}
                 key={this.state.selectedRestaurant.id}
               />
-            </MapView> 
+            </MapView>
           </View>
         </ScrollView>
       </View>
@@ -106,19 +130,25 @@ export class App extends React.Component {
   }
 }
 
+const mainScreenStack = createStackNavigator(
+  {
+    Home: {
+      screen: App
+    }
+  },
+);
+
 export const DrawerNavigator = createDrawerNavigator({
   Home: {
-    screen: App,
+    screen: mainScreenStack,
   },
 });
 
 export default Application = createAppContainer(DrawerNavigator);
 
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 30,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
