@@ -1,9 +1,9 @@
 import React from 'react';
-import { StyleSheet, View, Image, TouchableOpacity, StatusBar } from 'react-native';
-import { ScrollView } from 'react-native-gesture-handler';
+import { StyleSheet, View, Image, TouchableOpacity, StatusBar, ScrollView, Platform, Alert } from 'react-native';
 import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import { DrawerActions } from 'react-navigation';
 
 export class App extends React.Component {
   static navigationOptions = ({ navigation }) => ({
@@ -15,18 +15,29 @@ export class App extends React.Component {
     headerTitleStyle: {
       fontWeight: 'bold',
     },
-    headerLeft: <Icon
-      name="menu"
-      size={35}
-      color={'#fff'}
-      style={{ marginLeft: 5 }}
-      onPress={() => navigation.navigate('DrawerOpen')} />,
-    headerRight: <Icon
-      name="favorite-border"
-      size={35}
-      color={'#fff'}
-      style={{ marginRight: 5 }}
-      onPress={() => navigation.navigate('DrawerOpen')} />
+    headerLeft:
+      <Icon
+        name="menu"
+        size={35}
+        color={'#fff'}
+        style={{ marginLeft: 5 }}
+        onPress={() => navigation.openDrawer()} />,
+    headerRight:
+      <Icon
+        name="favorite-border"
+        size={35}
+        color={'#fff'}
+        style={{ marginRight: 5 }}
+        onPress={() => Alert.alert(
+          'Sync Complete',
+          'All your data are belong to us.',
+          [
+            { text: 'Ask me later', onPress: () => console.log('Ask me later pressed') },
+            { text: 'Cancel', onPress: () => console.log('Cancel Pressed'), style: 'cancel' },
+            { text: 'OK', onPress: () => console.log('OK Pressed') },
+          ],
+          { cancelable: false }
+        )} />
   });
 
   constructor(props) {
@@ -90,8 +101,8 @@ export class App extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <StatusBar barStyle="dark-content" />
-        <ScrollView>
+        <View>
+          <StatusBar barStyle="dark-content" />
           <View style={styles.foodContainer}>
             <ScrollView
               horizontal={true}
@@ -111,7 +122,7 @@ export class App extends React.Component {
               }
             </ScrollView>
           </View>
-          <View style={styles.section}>
+          <View style={Platform.OS == 'ios' ? styles.mapSectionIos : styles.mapSectionAndroid}>
             <MapView
               style={{ flex: 1 }}
               region={this.state.region}
@@ -124,7 +135,7 @@ export class App extends React.Component {
               />
             </MapView>
           </View>
-        </ScrollView>
+        </View>
       </View>
     );
   }
@@ -159,18 +170,21 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center'
   },
-  section: {
+  mapSectionIos: {
     flex: 3,
-    height: 600,
+  },
+  mapSectionAndroid: {
+    flex: 2,
+    marginTop: 5,
   },
   div: {
     width: 200,
     height: 200,
-    margin: 15,
-    borderRadius: 10
+    margin: 10,
+    borderRadius: 10,
   },
   image: {
-    height: 200,
+    height: 180,
     resizeMode: 'cover',
     borderRadius: 15
   }
