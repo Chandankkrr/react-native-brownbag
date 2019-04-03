@@ -3,7 +3,6 @@ import { StyleSheet, View, Image, TouchableOpacity, StatusBar, ScrollView, Platf
 import { createAppContainer, createDrawerNavigator, createStackNavigator } from 'react-navigation';
 import MapView, { Marker } from 'react-native-maps';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import { DrawerActions } from 'react-navigation';
 
 export class App extends React.Component {
   static navigationOptions = ({ navigation }) => ({
